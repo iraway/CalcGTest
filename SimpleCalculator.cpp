@@ -4,16 +4,17 @@
 #include "IHistory.h"
 
 #include <sstream>
+#include <stdexcept>
 
 namespace calc
 {
 
-SimpleCalculator::SimpleCalculator(IHistory& history)
+SimpleCalculator::SimpleCalculator(IHistory* history)
     : m_history(history)
 {
 }
 
-void SimpleCalculator::SetHistory(IHistory& history)
+void SimpleCalculator::SetHistory(IHistory* history)
 {
     m_history = history;
 }
@@ -41,6 +42,9 @@ int SimpleCalculator::Multiply(int a, int b)
 
 int SimpleCalculator::Divide(int a, int b)
 {
+    if (b == 0)
+        throw std::invalid_argument("Division by zero");
+
     int result = a / b;
     LogOperation(a, "/", b, result);
     return result;
@@ -50,7 +54,7 @@ void SimpleCalculator::LogOperation(int a, const char* op, int b, int result)
 {
     std::ostringstream oss;
     oss << a << " " << op << " " << b << " = " << result;
-    m_history.AddEntry(oss.str());
+    m_history->AddEntry(oss.str());
 }
 
 } // namespace calc
