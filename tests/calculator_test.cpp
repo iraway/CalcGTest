@@ -44,13 +44,24 @@ TEST(SimpleCalculatorTest, DivideRecordsHistory) {
     EXPECT_EQ(calc.Divide(20, 5), 4);
 }
 
-// Проверка: деление на ноль вызывает аварийное завершение (undefined behavior)
-TEST(SimpleCalculatorTest, DivideByZeroDeath) {
-    MockHistory hist;
+
+TEST(SimpleCalculatorTest, Divide_NormalCase)
+{
+    InMemoryHistory hist;
     SimpleCalculator calc(&hist);
 
-    // EXPECT_DEATH ожидает, что код завершится с ошибкой
-    EXPECT_DEATH({ calc.Divide(1, 0); }, "");
+    EXPECT_EQ(calc.Divide(10, 2), 5);
+    const auto ops = hist.GetLastOperations(1);
+    ASSERT_EQ(ops.size(), 1);
+    EXPECT_EQ(ops[0], "10 / 2 = 5");
+}
+
+TEST(SimpleCalculatorTest, Divide_ByZeroThrows)
+{
+    InMemoryHistory hist;
+    SimpleCalculator calc(&hist);
+
+    EXPECT_THROW(calc.Divide(10, 0), std::invalid_argument);
 }
 
 // Проверка: можно подменить хранилище истории на лету и оно будет использоваться
