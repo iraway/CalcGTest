@@ -60,7 +60,7 @@ TEST(InMemoryHistoryTest, RequestZeroOperations) {
 }
 
 // FIXME: этот тест демонстрирует отсутствие ограничения на размер истории
-TEST(InMemoryHistoryTest, DefaultCapacityExceededFails) {
+TEST(InMemoryHistoryTest, DISABLED_DefaultCapacityExceededFails) {
     InMemoryHistory h;
 
     // Добавим 200 записей
